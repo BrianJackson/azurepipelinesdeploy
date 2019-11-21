@@ -96,7 +96,7 @@
             "name": "AllowAllWindowsAzureIps",
             "type": "firewallrules",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-05-01-preview",
             "dependsOn": [
               "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
             ],
@@ -109,7 +109,7 @@
             "condition": "[parameters('enableADS')]",
             "type": "securityAlertPolicies",
             "name": "Default",
-            "apiVersion": "2018-06-01-preview",
+            "apiVersion": "2015-05-01-preview",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
             ],
@@ -122,7 +122,7 @@
             "condition": "[parameters('enableADS')]",
             "type": "vulnerabilityAssessments",
             "name": "Default",
-            "apiVersion": "2018-06-01-preview",
+            "apiVersion": "2015-05-01-preview",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers/', parameters('sqlServerName'))]",
                 "[resourceId('Microsoft.Sql/servers/securityAlertPolicies', parameters('sqlServerName'), 'Default')]"
@@ -140,7 +140,7 @@
             "name": "[concat(parameters('sqlServerName'), '/', parameters('sqldbName'))]",
             "type": "Microsoft.Sql/servers/databases",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-05-01-preview",
             "dependsOn": [],
             "tags": {
               "environment": "[parameters('configuration').environment]",
@@ -154,7 +154,7 @@
             }
           },     
           {
-            "apiVersion": "2018-06-01-preview",
+            "apiVersion": "2015-05-01-preview",
             "type": "failoverGroups",
             "name": "[parameters('sqlFailoverGroupName')]",
             "properties": {
