@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "configuration": {
+      "value": {
+        "displayName": "Azure SQL Server (logical)",
+        "environment": "dev",
+        "version": "1.0"
+      }
+    },
+    "sqlServerName": {
+      "value": "brianjacEUS2-1"
+    },
+    "administratorLogin": {
+      "value": "SQLAdmin"
+    },
+    "administratorLoginPassword": {
+      "value": "PW"
+    },
+    "sqlSecondaryServerName": {
+        "value": "brianjacWUS2-2"
+    },
+    "enableADS": {
+        "value": false
+    }
+  }
+}	
