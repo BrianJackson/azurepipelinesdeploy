@@ -10,16 +10,16 @@
       }
     },
     "sqlServerName": {
-      "value": "brianjacEUS2-1"
+      "value": "secretvalue"
     },
     "administratorLogin": {
-      "value": "SQLAdmin"
+      "value": "secretvalue"
     },
     "administratorLoginPassword": {
-      "value": "PW"
+      "value": "secretvalue"
     },
     "sqlSecondaryServerName": {
-        "value": "brianjacWUS2-2"
+        "value": "secretvalue"
     },
     "enableADS": {
         "value": false
