@@ -1,20 +1,58 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+#Deploy ARM template
 
-trigger:
-- master
+variables: 
+  dbname: 'appdb'
 
-pool:
-  vmImage: 'ubuntu-latest'
+stages:
+- stage: 'Build'
+  displayName: 'Build database application (DACPAC)'
+  jobs:
+  - job: 'Build DACPAC'
+    displayName: 'DACPAC build'
+    pool:
+      vmImage: 'windows-latest'
+      demands: azureps
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    - task: VSBuild@1
+      displayName: 'Build the database project'
+      inputs:
+        project: '**/*.sqlproj'
+
+    - task: CopyFiles@2
+      displayName: 'Copy dacpac file to staging directory'
+      inputs:
+        contents: |
+          Tailspin.SpaceGame.Database/bin/**/*.dacpac
+        targetFolder: '$(Build.StagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: dropDacpac
+      condition: succeededOrFailed()
+
+- stage: 'Deploy DB'
+  displayName: 'Deploy SQL Infra and Schema'
+  jobs:
+  - job: 'DeploySQLInfra'
+    displayName: 'Deploy SQL Infra'
+    pool:
+      vmImage: 'windows-latest'
+      demands: azureps 
+
+    steps:
+    - task: AzurePowerShell@3
+      inputs:
+        azureSubscription: 'demo-deploy-sp'
+        ScriptPath: 'AzureResourceGroupDemo/Deploy-AzureResourceGroup.ps1'
+        ScriptArguments: -ResourceGroupName 'demogroup' -ResourceGroupLocation 'centralus'
+        azurePowerShellVersion: LatestVersion
 
