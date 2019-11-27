@@ -1,0 +1,58 @@
+#Deploy ARM template
+
+variables: 
+  dbname: 'appdb'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build database application (DACPAC)'
+  jobs:
+  - job: 'buildDACPAC'
+    displayName: 'DACPAC build'
+    pool:
+      vmImage: 'windows-latest'
+      demands: azureps
+
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: VSBuild@1
+      displayName: 'Build the database project'
+      inputs:
+        project: '**/*.sqlproj'
+
+    - task: CopyFiles@2
+      displayName: 'Copy dacpac file to staging directory'
+      inputs:
+        contents: |
+          Tailspin.SpaceGame.Database/bin/**/*.dacpac
+        targetFolder: '$(Build.StagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: dropDacpac
+      condition: succeededOrFailed()
+
+- stage: 'Deploy DB'
+  displayName: 'Deploy SQL Infra and Schema'
+  jobs:
+  - job: 'deploySQLInfra'
+    displayName: 'Deploy SQL Infra'
+    pool:
+      vmImage: 'windows-latest'
+      demands: azureps 
+
+    steps:
+    - task: AzurePowerShell@3
+      inputs:
+        azureSubscription: 'demo-deploy-sp'
+        ScriptPath: 'templates/sql/Deploy-AzureResourceGroup.ps1'
+        ScriptArguments: -ResourceGroupName 'demogroup' -ResourceGroupLocation 'centralus'
+        azurePowerShellVersion: LatestVersion
+
