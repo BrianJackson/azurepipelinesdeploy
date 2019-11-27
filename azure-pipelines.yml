@@ -52,7 +52,7 @@ stages:
     - task: AzurePowerShell@3
       inputs:
         azureSubscription: 'demo-deploy-sp'
-        ScriptPath: 'AzureResourceGroupDemo/Deploy-AzureResourceGroup.ps1'
+        ScriptPath: 'templates/sql/Deploy-AzureResourceGroup.ps1'
         ScriptArguments: -ResourceGroupName 'demogroup' -ResourceGroupLocation 'centralus'
         azurePowerShellVersion: LatestVersion
 
