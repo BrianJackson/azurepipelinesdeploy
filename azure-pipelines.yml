@@ -7,7 +7,7 @@ stages:
 - stage: 'Build'
   displayName: 'Build database application (DACPAC)'
   jobs:
-  - job: 'Build DACPAC'
+  - job: 'buildDACPAC'
     displayName: 'DACPAC build'
     pool:
       vmImage: 'windows-latest'
@@ -42,7 +42,7 @@ stages:
 - stage: 'Deploy DB'
   displayName: 'Deploy SQL Infra and Schema'
   jobs:
-  - job: 'DeploySQLInfra'
+  - job: 'deploySQLInfra'
     displayName: 'Deploy SQL Infra'
     pool:
       vmImage: 'windows-latest'
