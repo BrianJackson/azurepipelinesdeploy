@@ -1,0 +1,75 @@
+#Build database project, Deploy ARM template
+
+variables: 
+  dbname: 'appdb'
+  targetrg: 'customers'
+  location: 'East US 2'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build database application (DACPAC)'
+  jobs:
+  - job: 'buildDACPAC'
+    displayName: 'DACPAC build'
+    pool:
+      vmImage: 'windows-latest'
+      demands: azureps
+
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: VSBuild@1
+      displayName: 'Build the database project'
+      inputs:
+        project: '**/*.sqlproj'
+
+    - task: CopyFiles@2
+      displayName: 'Copy dacpac file to staging directory'
+      inputs:
+        contents: |
+          SampleDB/bin/**/*.dacpac
+        targetFolder: '$(Build.StagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: dropDacpac
+      condition: succeededOrFailed()
+
+- stage: 'Deploy DB'
+  displayName: 'Deploy SQL Infra and Schema'
+  jobs:
+  - job: 'deploySQLInfra'
+    displayName: 'Deploy SQL Infra'
+    pool:
+      vmImage: 'windows-latest'
+      demands: azureps 
+    environment: Dev
+    variables:
+    - group: Dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: dropDacpac
+
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              ConnectedServiceName: 'Azure Customers RG'
+              subscriptionName: '$(subscriptionID)'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: '$(targetrg)'
+              location: '$(location)'
+              templateLocation: 'Linked artifact'
+              csmFile: 'templates/sql/azuredeploy.json'
+              csmParametersFile: 'templates/sql/azuredeploy.parameters.json'
+              overrideParameters: '-sqlServerName $(sqlservername) -administratorLogin $(sqladmin) -administratorLoginPassword $(sqlpwd)'
+              deploymentMode: 'Incremental'
+
