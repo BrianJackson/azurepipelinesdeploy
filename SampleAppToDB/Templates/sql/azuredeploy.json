@@ -78,7 +78,7 @@
       "defaultValue": false,
       "type": "bool",
       "metadata": {
-        "description": "Enable Geo Replication - Azure Gov."
+        "description": "Enable Geo Replication - available in all regions."
       }
     },
     "enableLogAnalytics": {
@@ -228,8 +228,88 @@
                 "workspaceId": "[parameters('workspaceId')]",
                 "logs": [
                   {
-                    "category": "Basic Metrics",
+                    "category": "SQLInsights",
                     "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "AutomaticTuning",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "QueryStoreRuntimeStatistics",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "QueryStoreWaitStatistics",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "Errors",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "DatabaseWaitStatistics",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "Timeouts",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "Blocks",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "Deadlocks",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "Audit",
+                    "enabled": false,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "category": "SQLSecurityAuditEvents",
+                    "enabled": false,
                     "retentionPolicy": {
                       "days": 0,
                       "enabled": false
@@ -238,12 +318,22 @@
                 ],
                 "metrics": [
                   {
-                    "category": "AllMetrics",
+                    "category": "Basic",
                     "enabled": true,
                     "retentionPolicy": {
-                      "enabled": false,
-                      "days": 0
-                    }
+                      "days": 0,
+                      "enabled": false
+                    },
+                    "timeGrain": null
+                  },
+                  {
+                    "category": "InstanceAndAppAdvanced",
+                    "enabled": true,
+                    "retentionPolicy": {
+                      "days": 0,
+                      "enabled": false
+                    },
+                    "timeGrain": null
                   }
                 ]
               }
@@ -272,7 +362,7 @@
       "location": "[parameters('sqlSecondaryDbLocation')]",
       "properties": {
         "createMode": "OnlineSecondary",
-        "sourceDatabaseId":  "[resourceId('Microsoft.Sql/servers/',parameters('sqlServerName'), '/databases/', parameters('sqldbName'))]",
+        "sourceDatabaseId": "[resourceId('Microsoft.Sql/servers/',parameters('sqlServerName'), '/databases/', parameters('sqldbName'))]",
         "edition": "[parameters('sqldbEdition')]",
         "maxSizeBytes": "[parameters('sqldbSize')]",
         "requestedServiceObjectiveName": "[parameters('sqldbRequestedServiceObjectiveName')]"

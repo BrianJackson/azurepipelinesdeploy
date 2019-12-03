@@ -10,5 +10,5 @@ ARM Template for deploying Azure SQL in a Failover Group with monitoring and aud
 ### One way to determine the correct logs and metrics to add to the "providers/diagnosticSettings" is to do the following:
 1. Use the Azure Portal and setup the desired diagnostic settings 
 2. Use the Azure CLI and issue the following command **this example is for Azure SQL Database**
-`az monitor diagnostic-settings show --name [diagnostic name] --resource "/subscriptions/[subscription ID]/resourceGroups/[resource group name]/providers/Microsoft.Sql/servers/[server name]/databases/[database name]"`
+>`az monitor diagnostic-settings show --name [diagnostic name] --resource "/subscriptions/[subscription ID]/resourceGroups/[resource group name]/providers/Microsoft.Sql/servers/[server name]/databases/[database name]"`
 3. Copy-paste the json arrays for Logs and Metrics into your template

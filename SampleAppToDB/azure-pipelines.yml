@@ -1,7 +1,9 @@
-#Deploy ARM template
+#Build database project, Deploy ARM template
 
 variables: 
   dbname: 'appdb'
+  targetrg: 'customers'
+  location: 'East US 2'
 
 stages:
 - stage: 'Build'
@@ -29,7 +31,7 @@ stages:
       displayName: 'Copy dacpac file to staging directory'
       inputs:
         contents: |
-          Tailspin.SpaceGame.Database/bin/**/*.dacpac
+          SampleDB/bin/**/*.dacpac
         targetFolder: '$(Build.StagingDirectory)'
 
     - task: PublishBuildArtifacts@1
@@ -47,12 +49,27 @@ stages:
     pool:
       vmImage: 'windows-latest'
       demands: azureps 
+    environment: Dev
+    variables:
+    - group: Dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: dropDacpac
 
-    steps:
-    - task: AzurePowerShell@3
-      inputs:
-        azureSubscription: 'demo-deploy-sp'
-        ScriptPath: 'templates/sql/Deploy-AzureResourceGroup.ps1'
-        ScriptArguments: -ResourceGroupName 'demogroup' -ResourceGroupLocation 'centralus'
-        azurePowerShellVersion: LatestVersion
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              ConnectedServiceName: 'Azure Customers RG'
+              subscriptionName: '$(subscriptionID)'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: '$(targetrg)'
+              location: '$(location)'
+              templateLocation: 'Linked artifact'
+              csmFile: 'templates/sql/azuredeploy.json'
+              csmParametersFile: 'templates/sql/azuredeploy.parameters.json'
+              overrideParameters: '-sqlServerName $(sqlservername) -administratorLogin $(sqladmin) -administratorLoginPassword $(sqlpwd)'
+              deploymentMode: 'Incremental'
 
