@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="a8f12081-3136-4fff-a2a3-e921202a15ae" ChangeDateTime="11/27/2019 18:34:16">
+    <Property Name="ElementName" Value="[dbo].[GPSEvents].[RecordedAt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GPSEvents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RecordedAtTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="88771ead-6635-4c9d-b685-ece14b3e1dbd" ChangeDateTime="11/27/2019 18:44:43">
+    <Property Name="ElementName" Value="[dbo].[GPSEvents].[EstimatedArrivalTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GPSEvents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExpectedArrivalTime" />
+  </Operation>
+</Operations>
