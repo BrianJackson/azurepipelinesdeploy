@@ -3,19 +3,19 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sqlServerName": {
-      "value": "brianjaceus2"
+      "value": "replaceme"
     },
     "administratorLogin": {
-      "value": "bjadmin"
+      "value": "replaceme"
     },
     "administratorLoginPassword": {
-      "value": "mtcEC48227!?"
+      "value": "replaceme"
     },
     "sqlSecondaryServerName": {
-      "value": "brianjacewus2"
+      "value": "replaceme"
     },
     "sqldbName": {
-      "value": "appdb"
+      "value": "replaceme"
     },
     "enableADS": {
       "value": false
