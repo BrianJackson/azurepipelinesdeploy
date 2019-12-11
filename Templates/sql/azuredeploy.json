@@ -202,7 +202,7 @@
           "condition": "[parameters('enableADS')]",
           "type": "vulnerabilityAssessments",
           "name": "Default",
-          "apiVersion": "2018-06-01-preview",
+          "apiVersion": "2017-03-01-preview",
           "dependsOn": [
             "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('sqldbName'))]"
           ],
@@ -365,7 +365,8 @@
         "requestedServiceObjectiveName": "[parameters('sqldbRequestedServiceObjectiveName')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Sql/servers/', parameters('sqlSecondaryServerName'))]"
+        "[resourceId('Microsoft.Sql/servers/', parameters('sqlSecondaryServerName'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('sqldbName'))]"
       ]
     },
     {

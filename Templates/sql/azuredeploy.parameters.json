@@ -3,19 +3,19 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sqlServerName": {
-      "value": "replaceme"
+      "value": "replaceme1"
     },
     "administratorLogin": {
-      "value": "replaceme"
+      "value": "replaceme2"
     },
     "administratorLoginPassword": {
-      "value": "replaceme"
+      "value": "replaceme3"
     },
     "sqlSecondaryServerName": {
-      "value": "replaceme"
+      "value": "replaceme4"
     },
     "sqldbName": {
-      "value": "replaceme"
+      "value": "appdb"
     },
     "enableADS": {
       "value": false
